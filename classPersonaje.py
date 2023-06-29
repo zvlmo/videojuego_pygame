@@ -173,6 +173,8 @@ class Personaje ():
                     attack = pygame.Rect(self.rect.x * -1, self.rect.y, self.rect.width+20, self.rect.height )
                 if attack.colliderect(target.rect):
                     target.hp -= 10
+                    if target.hp <= 0:
+                        target.esta_vivo = False
                     self.flag = True
                     print(target.hp)
                     print("Hit")

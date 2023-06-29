@@ -15,8 +15,9 @@ def actualizar_pantalla(pantalla,fondo,lista_objetos,lista_enemigos,enemigo_cami
         if lista_enemigos[enemigo].esta_vivo == True:
             lista_enemigos[enemigo].blit(pantalla)
             lista_enemigos[enemigo].update_pantalla(enemigo_camina,enemigo_camina_izquierda)
-            if lista_enemigos[enemigo].hp <= 0:
-                lista_enemigos[enemigo].rect.x = -2000
+        else:
+            lista_enemigos.remove(lista_enemigos[enemigo])
+                #lista_enemigos[enemigo].rect.x = -2000
                 
 
     if personaje.hp > 0:
@@ -31,3 +32,5 @@ def obtener_rectangulos(principal)->dict:
     diccionario["left"] = pygame.Rect(principal.left, principal.top, 2, principal.height)
     diccionario["top"] = pygame.Rect(principal.left, principal.top, principal.width, 10)
     return diccionario
+
+    #IF INVEL ACTUAL ES IGUAL A UNO, CUANDO SE CUMPLAN TODAS LAS CONDICIONES CAMBIAS EL VALOR DE NIVEL ACTUAL, UNA VEZ COMPLETADO EL NIVEL 3, AGREGAR QUE SE PUEDA ELEGIR EL VALOR DE NIVEL ACTUAL

@@ -11,10 +11,10 @@ def nivel_1():
     for objeto in lista_objetos:
         objeto.brindar_buff(personaje1)
         
-    crear_hud(PANTALLA,personaje1.puntos,ANCHO,personaje1)
     print(personaje1.puntos)
     corazon_3 = pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/corazones/FULL.png")
     
 
 
     actualizar_pantalla(PANTALLA,fondo,lista_objetos,lista_enemigos,enemigo1_caminar,enemigo1_caminar_izquierda,lista_plataformas,personaje1,personaje_correr,personaje_saltando,personaje_quieto,personaje_ataque_mele,personaje_correr_derecha,personaje_salta_derecha,personaje_mira_derecha,personaje_ataca_derecha,personaje_golpeado,personaje_golpeado_izquierda,personaje_dispara,personaje_dispara_izquierda)
+    crear_hud(PANTALLA,personaje1.puntos,ANCHO,personaje1)

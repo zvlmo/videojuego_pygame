@@ -33,6 +33,8 @@ class Proyectil():
         if self.rect.colliderect(target.rect):
             if self.flag_proyectil == False:
                 target.hp -= 15
+                if target.hp <= 0:
+                    target.esta_vivo = False
                 print(target.hp)
                 self.flag_proyectil = True
         if get_mode():

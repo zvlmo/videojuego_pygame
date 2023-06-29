@@ -3,23 +3,23 @@ import sys
 
 
 
-personaje_quieto  =     [pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/0.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/0.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/1.png")
+personaje_quieto  =     [pygame.image.load("PYGAME/PNGS/LUFFY/0.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/0.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/1.png")
 
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/1.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/2.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/2.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/1.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/2.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/2.png")
 
                         ]
 
-personaje_saltando =  [pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/15.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/16.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/17.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/18.png")
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/19.png")
+personaje_saltando =  [pygame.image.load("PYGAME/PNGS/LUFFY/15.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/16.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/17.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/18.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/19.png")
 
-                        ,pygame.image.load("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/LUFFY/19.png")
+                        ,pygame.image.load("PYGAME/PNGS/LUFFY/19.png")
 
 
 
