@@ -1,6 +1,6 @@
 import pygame
 from animacion_personaje import *
-def actualizar_pantalla(pantalla,fondo,lista_objetos,lista_enemigos,enemigo_camina,enemigo_camina_izquierda,lista_plataformas,personaje,personaje_correr,personaje_saltando,personaje_quieto,personaje_ataque_mele,personaje_correr_derecha,personaje_salta_derecha,personaje_mira_derecha,personaje_ataca_derecha,personaje_golpeado,personaje_golpeado_izquierda,dispara,dispara_izquierda):
+def actualizar_pantalla(pantalla,fondo,lista_trampas,lista_objetos,lista_enemigos,enemigo_camina,enemigo_camina_izquierda,lista_plataformas,personaje,personaje_correr,personaje_saltando,personaje_quieto,personaje_ataque_mele,personaje_correr_derecha,personaje_salta_derecha,personaje_mira_derecha,personaje_ataca_derecha,personaje_golpeado,personaje_golpeado_izquierda,dispara,dispara_izquierda,personaje_morir,personaje_morir_derecha):
     bandera = False
     pantalla.blit(fondo,(0,0))
     pantalla.blit(lista_plataformas[0].imagen,(0,750))
@@ -11,18 +11,19 @@ def actualizar_pantalla(pantalla,fondo,lista_objetos,lista_enemigos,enemigo_cami
         pantalla.blit(objeto.imagen,objeto.rect)
         if personaje.rect.colliderect(objeto):
             lista_objetos.remove(objeto)
-    for enemigo in range(len(lista_enemigos)):
-        if lista_enemigos[enemigo].esta_vivo == True:
-            lista_enemigos[enemigo].blit(pantalla)
-            lista_enemigos[enemigo].update_pantalla(enemigo_camina,enemigo_camina_izquierda)
+    for enemigo in lista_enemigos:
+        if enemigo.esta_vivo == True:
+            enemigo.blit(pantalla)
+            enemigo.update_pantalla(enemigo_camina,enemigo_camina_izquierda)
         else:
-            lista_enemigos.remove(lista_enemigos[enemigo])
-                #lista_enemigos[enemigo].rect.x = -2000
+            personaje.puntos += 50
+            lista_enemigos.remove(enemigo)
                 
 
-    if personaje.hp > 0:
-        personaje.blit(pantalla)
-        personaje.update_pantalla(pantalla,lista_enemigos,personaje_correr,personaje_saltando,personaje_quieto,personaje_ataque_mele,personaje_correr_derecha,personaje_salta_derecha,personaje_mira_derecha,personaje_ataca_derecha,personaje_golpeado,personaje_golpeado_izquierda,dispara,dispara_izquierda)
+    personaje.blit(pantalla)
+    personaje.update_pantalla(pantalla,lista_enemigos,personaje_correr,personaje_saltando,personaje_quieto,personaje_ataque_mele,personaje_correr_derecha,personaje_salta_derecha,personaje_mira_derecha,personaje_ataca_derecha,personaje_golpeado,personaje_golpeado_izquierda,dispara,dispara_izquierda,personaje_morir,personaje_morir_derecha)
+    for trampa in lista_trampas:
+        pantalla.blit(trampa.imagen,trampa.rect)
 
 def obtener_rectangulos(principal)->dict:
     diccionario = {}

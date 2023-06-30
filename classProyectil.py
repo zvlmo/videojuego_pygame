@@ -8,7 +8,7 @@ class Proyectil():
         self.imagen = lista_proyectil[0][0]
         self.rect = self.imagen.get_rect()
         self.rect.center = (x,y)
-        self.velocidad = 4
+        self.velocidad = 6
         self.direc = direc
         self.pantalla = surface
         self.flag_proyectil = False

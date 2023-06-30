@@ -25,6 +25,7 @@ class Personaje ():
         self.disparos = 5
         self.proyectiles = []
         self.puntos = 0
+        self.esta_vivo = True
     def animar_personaje(self,acciones_peronaje,pantalla):
         largo  = len(acciones_peronaje)
         if self.pasos >= largo:
@@ -57,62 +58,63 @@ class Personaje ():
             key = pygame.key.get_pressed()
             #SOLO PUEDE HACER UNA ACCION Y NO ATACAR
             #movimiento
-            if self.attacking == False:
-                if self.jump == False:
-                    self.que_hace = "quieto"
-                else:
-                    self.que_hace = "salta"
-                    
-                if key[pygame.K_a]:
-                    coord_x = -VELOCIDAD
-                    self.direccion = 'izquierda'
-                    self.direc = True
+            if self.esta_vivo ==True:
+                if self.attacking == False:
                     if self.jump == False:
-                        self.que_hace = "izquierda"
-                    
-                elif key[pygame.K_d]:
-                    self.direccion = 'derecha'
-                    coord_x = VELOCIDAD
-                    self.direc = False
-                    if self.jump == False:
-                        self.que_hace = "derecha"
-                    
-                                                    
-                if key[pygame.K_w] and self.jump  == False:
-                    self.vel_y = -30
-                    self.jump = True
-                    self.que_hace = "salta"
-                for plataforma in lista_plataforma:
-                    if self.rect.colliderect(plataforma.rect):
-                        if key[pygame.K_s]:
-                                self.rect.y += plataforma.rect.height
+                        self.que_hace = "quieto"
+                    else:
+                        self.que_hace = "salta"
+                        
+                    if key[pygame.K_a]:
+                        coord_x = -VELOCIDAD
+                        self.direccion = 'izquierda'
+                        self.direc = True
+                        if self.jump == False:
+                            self.que_hace = "izquierda"
+                        
+                    elif key[pygame.K_d]:
+                        self.direccion = 'derecha'
+                        coord_x = VELOCIDAD
+                        self.direc = False
+                        if self.jump == False:
+                            self.que_hace = "derecha"
+                        
+                                                        
+                    if key[pygame.K_w] and self.jump  == False:
+                        self.vel_y = -30
+                        self.jump = True
+                        self.que_hace = "salta"
+                    for plataforma in lista_plataforma:
+                        if self.rect.colliderect(plataforma.rect):
+                            if key[pygame.K_s]:
+                                    self.rect.y += plataforma.rect.height
 
-                if self.disparos > 0:
-                    if key[pygame.K_e]:
-                        print("dispara")
+                    if self.disparos > 0:
+                        if key[pygame.K_e]:
+                            print("dispara")
+                            self.attacking = True
+                            self.que_hace= 'ataque_range'
+                    else:
+                        print("No hay balas")
+                    #ATAQUES
+                    if key[pygame.K_r] :
+                        self.attack_mele(lista_enemigo,surface)
+                        self.que_hace= 'ataca'
                         self.attacking = True
-                        self.que_hace= 'ataque_range'
+                        
                 else:
-                    print("No hay balas")
-                #ATAQUES
-                if key[pygame.K_r] :
-                    self.attack_mele(lista_enemigo,surface)
-                    self.que_hace= 'ataca'
-                    self.attacking = True
-                    
-            else:
-                self.attacking = False
-            self.vel_y += GRAVEDAD
-            coord_y += self.vel_y
+                    self.attacking = False
+                self.vel_y += GRAVEDAD
+                coord_y += self.vel_y
 
-            if self.rect.left + coord_x < 10:
-                coord_x = 0 
-                
-            if self.rect.right + coord_x > ancho:
-                coord_x = coord_x - 10
-            for enemigo in lista_enemigo:
-                if enemigo.rect.colliderect(self.rect):
-                    self.que_hace = 'recibe_dmg'
+                if self.rect.left + coord_x < 10:
+                    coord_x = 0 
+                    
+                if self.rect.right + coord_x > ancho:
+                    coord_x = coord_x - 10
+                for enemigo in lista_enemigo:
+                    if enemigo.rect.colliderect(self.rect):
+                        self.que_hace = 'recibe_dmg'
             self.aplicar_gravedad(lista_plataforma)
             
             #ACTUALIZAMOS POSICIONES DE JUGADOR
@@ -122,14 +124,18 @@ class Personaje ():
 
             
 
+    def muere_personaje(self,tiempo):
+        if self.hp <= 0 or tiempo == 0:
+            self.esta_vivo = False
+            self.que_hace = 'muere'
                 
-    def update_pantalla(self,pantalla,lista_enemigos,correr,saltar,quieto,atacar_mele, correr_izquierda,saltar_izquierda,mirar_izquierda,atacar_izquierda,recibe_dmg,recibe_dmg_izquierda,dispara,dispara_izquierda):
+    def update_pantalla(self,pantalla,lista_enemigos,correr,saltar,quieto,atacar_mele, correr_izquierda,saltar_izquierda,mirar_izquierda,atacar_izquierda,recibe_dmg,recibe_dmg_izquierda,dispara,dispara_izquierda,muere,muere_derecha):
         for proyectil in self.proyectiles:
             for enemigo in lista_enemigos:
                 proyectil.update(enemigo)
         self.tiempo_transcurrido = self.delay 
         self.delay += 1
-        if self.tiempo_transcurrido >= 5:
+        if self.tiempo_transcurrido >= 3:
             self.delay = 0
             
             match self.que_hace:
@@ -163,6 +169,9 @@ class Personaje ():
                         self.animar_personaje(recibe_dmg_izquierda,pantalla)
                     else:
                         self.animar_personaje(recibe_dmg,pantalla)
+                case 'muere':
+                        self.animar_personaje(muere,pantalla)
+                    
     def attack_mele(self,lista,surface):
         #pygame.draw.rect(surface,(153,204,255), self.attack)
         for target in lista:
@@ -180,8 +189,7 @@ class Personaje ():
                     print("Hit")
             else:
                 self.flag = False
-        if get_mode() == True:
-            pygame.draw.rect(surface,"blue",attack,2)
+        
             
     def attack_range(self,target):
         proyectil = Proyectil(self.rect.x,self.rect.y + 20, self.direc,self.pantalla,lista_animacion_proyectil)
@@ -194,6 +202,4 @@ class Personaje ():
             if proyectil.rect.colliderect(enemigo.rect):
                 self.puntos+= 5
                 print("hit proyectil")
-
-            
 
