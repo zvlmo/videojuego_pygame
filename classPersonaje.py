@@ -4,9 +4,9 @@ from animacion_personaje import *
 from modo import *
 from classProyectil import Proyectil
 class Personaje ():
-    def __init__(self,x,y,pantalla):
-        
-        self.rect = pygame.Rect((x,y,170/2,250/2))
+    def __init__(self,x,y,ancho,alto,pantalla):
+        pygame.mixer.init()
+        self.rect = pygame.Rect((x,y,ancho,alto))
         self.vel_y = 0
         self.jump = False
         self.attacking = False
@@ -26,6 +26,10 @@ class Personaje ():
         self.proyectiles = []
         self.puntos = 0
         self.esta_vivo = True
+        self.salto = pygame.mixer.Sound("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/SONIDOS NUEVOS/Monkey D.Luffy28.mp3")
+        self.disparo = pygame.mixer.Sound("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/SONIDOS/disparo.wav")
+        self.hace_dmg  = False
+        self.sonido_muerte = pygame.mixer.Sound("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/SONIDOS/gritomuerte.mp3")
     def animar_personaje(self,acciones_peronaje,pantalla):
         largo  = len(acciones_peronaje)
         if self.pasos >= largo:
@@ -36,18 +40,16 @@ class Personaje ():
     def blit(self,screen):
         screen.blit(self.imagen,self.rect)
         
-    def aplicar_gravedad(self,lista_plataforma):
-        for piso in lista_plataforma:
-            if self.rect.colliderect(piso):
-                self.rect.bottom = piso.get_top()
-                self.vel_y = 0
-                self.jump = False
-            
-            # if self.rect.top.colliderect(piso):
-            #     self.rect.y = piso.rect.top
-            else:
-                pass
-    def movimiento(self, ancho,alto,surface,lista_enemigo,lista_plataforma):
+    def aplicar_gravedad(self, lista_plataformas):
+        for plataforma in lista_plataformas:
+            if self.rect.colliderect(plataforma.rect):
+                if self.vel_y > 0:
+                    self.rect.bottom = plataforma.get_top()
+                    self.vel_y = 0
+                    self.jump = False
+                
+    def movimiento(self, ancho,alto,surface,lista_enemigo,lista_plataforma,lista_jefe):
+            pygame.mixer.init()
             contador_pasos = 0
             posicion_actual_x = 0
             VELOCIDAD = 10
@@ -84,18 +86,17 @@ class Personaje ():
                         self.vel_y = -30
                         self.jump = True
                         self.que_hace = "salta"
-                    for plataforma in lista_plataforma:
-                        if self.rect.colliderect(plataforma.rect):
-                            if key[pygame.K_s]:
-                                    self.rect.y += plataforma.rect.height
+                        if self.jump == True:
+                            self.salto.play()
+                    
 
                     if self.disparos > 0:
                         if key[pygame.K_e]:
-                            print("dispara")
                             self.attacking = True
+                            print("dispara")
+                            if self.attacking == True:
+                                self.disparo.play()
                             self.que_hace= 'ataque_range'
-                    else:
-                        print("No hay balas")
                     #ATAQUES
                     if key[pygame.K_r] :
                         self.attack_mele(lista_enemigo,surface)
@@ -115,6 +116,16 @@ class Personaje ():
                 for enemigo in lista_enemigo:
                     if enemigo.rect.colliderect(self.rect):
                         self.que_hace = 'recibe_dmg'
+                        
+                # for boss in lista_jefe:
+                #     for proyectiles in self.proyectiles:
+                #         if self.hace_dmg == False:
+                #             if boss.rect.colliderect(proyectiles.rect):
+                #                 boss.restar_hp()
+                #                 self.hace_dmg = True
+                #                 print(boss.hp)
+                #         else:
+                #             False
             self.aplicar_gravedad(lista_plataforma)
             
             #ACTUALIZAMOS POSICIONES DE JUGADOR
@@ -128,11 +139,17 @@ class Personaje ():
         if self.hp <= 0 or tiempo == 0:
             self.esta_vivo = False
             self.que_hace = 'muere'
+        if self.rect.centery > 1050:
+            self.esta_vivo = False
+            self.que_hace = 'muere'
+            self.sonido_muerte.play()
                 
-    def update_pantalla(self,pantalla,lista_enemigos,correr,saltar,quieto,atacar_mele, correr_izquierda,saltar_izquierda,mirar_izquierda,atacar_izquierda,recibe_dmg,recibe_dmg_izquierda,dispara,dispara_izquierda,muere,muere_derecha):
+    def update_pantalla(self,pantalla,lista_enemigos,correr,saltar,quieto,atacar_mele, correr_izquierda,saltar_izquierda,mirar_izquierda,atacar_izquierda,recibe_dmg,recibe_dmg_izquierda,dispara,dispara_izquierda,muere,muere_derecha,lista_jefe):
         for proyectil in self.proyectiles:
             for enemigo in lista_enemigos:
-                proyectil.update(enemigo)
+                    proyectil.update(enemigo,animacion_proyectil_derecha,animacion_proyectil)
+            
+                
         self.tiempo_transcurrido = self.delay 
         self.delay += 1
         if self.tiempo_transcurrido >= 3:
@@ -191,15 +208,11 @@ class Personaje ():
                 self.flag = False
         
             
-    def attack_range(self,target):
+    def attack_range(self):
         proyectil = Proyectil(self.rect.x,self.rect.y + 20, self.direc,self.pantalla,lista_animacion_proyectil)
         if self.direc:
             proyectil.rect.x += self.rect.width
         else:
             proyectil.rect.x += proyectil.rect.width
         self.proyectiles.append(proyectil)
-        for enemigo in target:
-            if proyectil.rect.colliderect(enemigo.rect):
-                self.puntos+= 5
-                print("hit proyectil")
-
+        

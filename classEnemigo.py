@@ -3,15 +3,10 @@ import random
 from animacion_personaje import *
 
 class Enemigos:
-    def __init__(self,x,y,hp):
-        # Inicializar Pygame y crear la ventana
-
-        # Crear un rectángulo inicial
+    def __init__(self,x,y,hp,ancho,alto):
+        pygame.mixer.init()
         self.hp = hp
-        #self.imagen = pygame.image.load("")
-        self.rect = pygame.Rect(x,y, 170/1.6, 250/1.6)
-
-        # Configurar la velocidad y la dirección inicial del movimiento
+        self.rect = pygame.Rect(x,y,ancho,alto)
         self.velocidad = random.randint(3,6)
         self.direccion_x = 1
         self.direccion_y = 1
@@ -20,6 +15,7 @@ class Enemigos:
         self.delay = 0
         self.esta_vivo = True
         self.flag = False
+        self.hacer_dmg= pygame.mixer.Sound("C:/Users/mathm/OneDrive/Escritorio/FACULTAD/PROGRA 1/PYGAME/PNGS/SONIDOS NUEVOS/Monkey D.Luffy20.mp3")
         
     def blit(self,screen):
         screen.blit(self.imagen,self.rect)
@@ -42,9 +38,11 @@ class Enemigos:
             self.direccion_x = -1
         elif self.rect.left <= left_range:
             self.direccion_x = 1
+        
     def realizar_dmg(self,target):
         if self.rect.colliderect(target.rect):
             if self.flag == False:
+                self.hacer_dmg.play()
                 target.hp -= 10
                 self.flag = True
                 print(target.hp)
@@ -78,7 +76,7 @@ class Enemigos:
             self.direccion_x = -1
         elif self.rect.left <= left_range:
             self.direccion_x = 1
-        if self.rect.top >= top_range:
+        if self.rect.bottom >= top_range:
             self.direccion_y = -1
-        elif self.rect.bottom <= bottom_range:
+        elif self.rect.top <= bottom_range:
             self.direccion_y = 1
